@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css"> <!-- Reuse main styles -->
+  <!-- Load Flatpickr CSS from local copy -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <style>
+    /* Additional styles specific to admin page */
+    body {
+      padding: 2rem; /* Add some padding around the content */
+    }
+    .admin-container {
+      max-width: 800px; /* Limit width */
+      margin: 0 auto; /* Center the container */
+    }
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+    .logout-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    .logout-button svg path {
+      transition: fill 0.3s;
+    }
+    body.dark-mode .logout-button svg path {
+      fill: #f0f0f0;
+    }
+    body:not(.dark-mode) .logout-button svg path {
+      fill: #353538;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .admin-section {
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      border-radius: 0.375rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark-mode .admin-section {
+      background-color: #1f2937;
+    }
+    body:not(.dark-mode) .admin-section {
+      background-color: #f9fafb;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    body.dark-mode .form-label {
+      color: #d1d5db;
+    }
+    body:not(.dark-mode) .form-label {
+      color: #374151;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      border: 1px solid;
+      border-radius: 0.25rem;
+      padding: 0.5rem 0.75rem;
+      box-sizing: border-box;
+      transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+    }
+    body.dark-mode .form-input, body.dark-mode .form-textarea {
+      background-color: #374151;
+      border-color: #4b5563;
+      color: #d1d5db;
+    }
+    body:not(.dark-mode) .form-input, body:not(.dark-mode) .form-textarea {
+      background-color: #f9fafb;
+      border-color: #d1d5db;
+      color: #1f2937;
+    }
+    .form-input:focus, .form-textarea:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+    .form-hint {
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+    body.dark-mode .form-hint {
+      color: #9ca3af;
+    }
+    body:not(.dark-mode) .form-hint {
+      color: #6b7280;
+    }
+    .button-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 640px) {
+      .button-row {
+        flex-direction: row;
+      }
+      .button-row button {
+        width: 50%;
+      }
+    }
+    .button {
+      border-radius: 0.375rem;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .button-green {
+      background-color: #10b981;
+      color: white;
+    }
+    .button-green:hover:not(:disabled) {
+      background-color: #059669;
+    }
+    .button-blue {
+      background-color: #3b82f6;
+      color: white;
+    }
+    .button-blue:hover:not(:disabled) {
+      background-color: #2563eb;
+    }
+    .button-red-outline {
+      border: 1px solid #dc2626;
+      color: #dc2626;
+      background-color: transparent;
+    }
+    .button-red-outline:hover:not(:disabled) {
+      background-color: #dc2626;
+      color: white;
+    }
+    .danger-zone {
+      border: 1px solid #dc2626;
+      border-radius: 0.375rem;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+    .danger-zone h2 {
+      color: #b91c1c;
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin-bottom: 0.5rem;
+    }
+    /* Flatpickr overrides for dark mode */
+    body.dark-mode .flatpickr-calendar {
+      background: #374151;
+      border-color: #4b5563;
+      box-shadow: 0 0 0 1px #4b5563;
+    }
+    body.dark-mode .flatpickr-months .flatpickr-month,
+    body.dark-mode .flatpickr-current-month .flatpickr-monthDropdown-months,
+    body.dark-mode .numInputWrapper .numInput {
+      color: #d1d5db;
+      fill: #d1d5db;
+    }
+    body.dark-mode .flatpickr-weekday {
+      color: #9ca3af;
+    }
+    body.dark-mode .flatpickr-day {
+      color: #d1d5db;
+    }
+    body.dark-mode .flatpickr-day:hover,
+    body.dark-mode .flatpickr-day:focus {
+      background: #4b5563;
+      border-color: #4b5563;
+    }
+    body.dark-mode .flatpickr-day.selected,
+    body.dark-mode .flatpickr-day.startRange,
+    body.dark-mode .flatpickr-day.endRange,
+    body.dark-mode .flatpickr-day.selected:focus,
+    body.dark-mode .flatpickr-day.startRange:focus,
+    body.dark-mode .flatpickr-day.endRange:focus,
+    body.dark-mode .flatpickr-day.selected:hover,
+    body.dark-mode .flatpickr-day.startRange:hover,
+    body.dark-mode .flatpickr-day.endRange:hover {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+    }
+    body.dark-mode .flatpickr-time input.flatpickr-hour,
+    body.dark-mode .flatpickr-time input.flatpickr-minute,
+    body.dark-mode .flatpickr-time .flatpickr-am-pm {
+      color: #d1d5db;
+    }
+    body.dark-mode .flatpickr-time input:hover,
+    body.dark-mode .flatpickr-time .flatpickr-am-pm:hover {
+      background: #4b5563;
+    }
+    /* Loading dots style */
+    .loading-dots-container {
+      display: inline-block;
+      margin-left: 8px;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+  <div class="admin-container">
+    <!-- Top Bar with Theme Toggle and Logout Button -->
+    <div class="top-bar">
+      <button class="theme-switcher" id="theme-switcher">🌞</button>
+      <button id="logout-button" class="logout-button" title="Logout">
+        <svg width="25" height="25" viewBox="0 0 0.469 0.469" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M.094.031a.03.03 0 0 0-.031.031v.344a.03.03 0 0 0 .031.031h.234a.016.016 0 0 0 0-.031H.094V.063h.234a.016.016 0 0 0 0-.031zm.3.122a.016.016 0 0 0-.022.022l.043.044H.203a.016.016 0 0 0 0 .031h.212L.371.294a.016.016 0 0 0 .022.022l.07-.07a.016.016 0 0 0 0-.022z"/>
+        </svg>
+      </button>
+    </div>
+
+    <h1>Admin Dashboard</h1>
+
+    <!-- Launch Date Section -->
+    <div class="admin-section">
+      <div style="margin-bottom: 1rem;">
+        <span style="font-weight: 600;">Current Launch Date: </span>
+        <span id="current-launch-date">
+          Loading<span class="loading-dots-container loading-dots"><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></span>
+        </span>
+      </div>
+      <label class="form-label">Change Launch Date:</label>
+      <div style="display: flex; gap: 1rem;">
+        <div style="width: 50%;">
+          <input type="text" id="date-picker" class="form-input" placeholder="Select day">
+        </div>
+        <div style="width: 50%;">
+          <input type="text" id="time-picker" class="form-input" placeholder="Select time">
+        </div>
+      </div>
+    </div>
+
+    <!-- Reminder Email Section -->
+    <div class="admin-section">
+      <h2>Customize Reminder Email</h2>
+      <div style="margin-bottom: 1rem;">
+        <label for="senderName" class="form-label">Sender Name:</label>
+        <input type="text" id="senderName" class="form-input" value="Waitlist App">
+        <p class="form-hint">The final "from" address will be constructed as: "<Sender Name>" &lt;RESEND_SENDER_EMAIL&gt;</p>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label for="subject" class="form-label">Subject:</label>
+        <input type="text" id="subject" class="form-input" value="Reminder: Our Launch is Approaching!">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label for="message" class="form-label">Message:</label>
+        <textarea id="message" rows="4" class="form-textarea">Hi there,
+
+Just a friendly reminder that our launch date is approaching! Get ready for our launch!</textarea>
+        <p class="form-hint">The launch date (<span id="message-launch-date">N/A</span>) will be included automatically.</p>
+      </div>
+    </div>
+
+    <!-- Buttons Row: Send Reminders + Download CSV + toggle reminder_sent flag -->
+    <div class="button-row">
+      <button id="send-reminders-button" class="button button-green">
+        Send Reminders
+        <span class="loading-dots-container loading-dots" style="display: none;">
+          <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+        </span>
+      </button>
+      <button id="download-csv-button" class="button button-blue">Download Waitlist as CSV</button>
+      <button id="toggle-reminders-button" class="button button-blue">
+        Toggle Reminder Flags (<span id="reminder-flag-status">unknown</span>)
+        <span class="loading-dots-container loading-dots" style="display: none;">
+          <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+        </span>
+      </button>
+    </div>
+
+
+    <!-- Danger Zone -->
+    <div class="danger-zone">
+      <h2>Danger Zone</h2>
+      <button id="delete-waitlist-button" class="button button-red-outline" style="width: 100%;">Delete All Waitlist Records</button>
+    </div>
+
+    <!-- Notification Area -->
+    <div id="notification-area" class="notification" style="display: none;">
+      <span id="notification-message"></span>
+    </div>
+  </div>
+
+  <!-- Load Flatpickr JS from local copy -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <!-- Load admin.js -->
+  <script src="admin.js"></script>
+</body>
+</html>
