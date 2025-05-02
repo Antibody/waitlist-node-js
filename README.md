@@ -124,6 +124,7 @@ This application provides a simple waitlist/newsletter signup and email reminder
 # --- Supabase ---
 SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
 SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
 DATABASE_URL=postgres://postgres:[YOUR-PASSWORD]@[YOUR-DB-HOST]:5432/postgres
 
 # --- Resend ---
