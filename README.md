@@ -217,10 +217,8 @@ The system features:
 1.  **Clone the repository (or download the files):**
     ```bash
     # If using Git
-    git clone <repository-url>
-    cd <repository-directory>
-
-   
+    git clone https://github.com/Antibody/waitlist-next-js.git 
+    cd waitlist-next-js   
     ```
 
 2.  **Install dependencies:**
@@ -229,8 +227,8 @@ The system features:
     ```
 
 3.  **Configure Environment Variables:**
-    *   Create a `.env` file in the root directory.
-    *   Copy the contents of `.env.example` (if provided) or add the required variables manually (see [Environment Variables](#environment-variables) section below).
+    *   Modify a `.env` file in the root directory.
+    *   If `.env` is not in the repo add the required variables manually (see [Environment Variables](#environment-variables) section below).
     *   Fill in your specific Supabase, Resend, and database credentials.
 
 4.  **Ensure Database Extensions:**
