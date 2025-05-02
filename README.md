@@ -217,8 +217,8 @@ The system features:
 1.  **Clone the repository (or download the files):**
     ```bash
     # If using Git
-    git clone https://github.com/Antibody/waitlist-next-js.git 
-    cd waitlist-next-js   
+    git clone https://github.com/Antibody/waitlist-node-js.git 
+    cd waitlist-node-js   
     ```
 
 2.  **Install dependencies:**
